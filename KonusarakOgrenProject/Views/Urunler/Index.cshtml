@@ -1,0 +1,101 @@
+﻿@using Bussiness.Models
+@model IEnumerable<UrunModel>
+@{
+    ViewData["Title"] = "Ürünler";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ürünler</title>
+</head>
+<body>
+    <div>
+        <h4>Markalar</h4>
+        <br />
+        @if (TempData["Mesaj"] != null)
+        {
+            <p>@TempData["Mesaj"]</p>
+        }
+
+        @if (Model != null && Model.Count() > 0)
+        {
+            <p>@Model.Count() kayıt bulundu.</p>
+        }
+        else
+        {
+            <p>Kayıt bulunamadı!</p>
+        }
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-action="Create">Yeni Ürün</a>
+            </p>
+        }
+
+        <table class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Adi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Aciklamasi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Renk)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Boyut)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MarkaAdiDisplay)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Adi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Aciklamasi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Renk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Boyut)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MarkaAdiDisplay)
+                        </td>
+                        <td>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a asp-action="Details" asp-route-id="@item.Id">Detay</a>
+
+                                @:
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
+
+                                    @: |
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+</html>
